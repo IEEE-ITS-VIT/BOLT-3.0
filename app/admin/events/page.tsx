@@ -15,7 +15,20 @@ export default async function AdminEventsPage({ searchParams }: { searchParams: 
     <PortalPage title="Events & BOLT" subtitle="Hackathons and competitions with registration, teams, rounds, scoring, results and certificates." width="max-w-7xl">
       <Flash ok={ok} error={error} />
       <div className="space-y-6">
-        <Card title="Events">
+        <Card
+          title="Events"
+          actions={
+            <a
+              href="/api/admin/export?scope=all-events&format=xlsx"
+              className="inline-flex items-center gap-1.5 rounded-xl bg-emerald-600 px-3 py-1.5 text-xs font-semibold text-white shadow-sm transition hover:bg-emerald-700"
+            >
+              <svg className="h-3.5 w-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                <path strokeLinecap="round" strokeLinejoin="round" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+              </svg>
+              Export All Registrations (.xlsx)
+            </a>
+          }
+        >
           {events.length === 0 ? (
             <Empty>No events yet. Create BOLT 3.0 below.</Empty>
           ) : (
