@@ -16,7 +16,7 @@ import {
   Clock,
   Trophy,
   ChevronRight,
-  ArrowLeft,
+  ArrowUpRight,
   CheckCircle2,
   MapPin,
 } from "lucide-react";
@@ -40,15 +40,30 @@ export default async function HackathonPage() {
       {/* ── HERO SECTION ── */}
       <section id="hero" className="relative py-10 md:py-16 overflow-hidden bg-brand-primary border-b border-white/15 text-white">
         <div className="container-x relative z-10">
-          {/* Top Left Return Button */}
-          <div className="flex items-center justify-between mb-6">
-            <a
-              href={settings.links.icetite}
-              className="inline-flex items-center gap-2 text-xs sm:text-sm font-bold text-white/90 hover:text-white bg-white/10 hover:bg-white/20 px-4 py-2 rounded-full border border-white/25 shadow-sm transition-all hover:scale-105"
-            >
-              <ArrowLeft className="w-4 h-4 text-[#CCFF00]" />
-              <span><E f="hackathon">{"ic-ETITE'28 Conference"}</E></span>
-            </a>
+          {/* Top Return / Portal Buttons */}
+          <div className="flex flex-wrap items-center justify-between gap-3 mb-6">
+            <div className="flex flex-wrap items-center gap-2.5">
+              <a
+                href={settings.links.icetite}
+                className="inline-flex items-center gap-2 text-xs sm:text-sm font-bold text-white/90 hover:text-white bg-white/10 hover:bg-white/20 px-3.5 py-2 rounded-full border border-white/25 shadow-sm transition-all hover:scale-105"
+              >
+                <div className="relative h-4 w-16 sm:w-20 shrink-0">
+                  <Image src="/logos/ic-etite28-cropped-transparent.png" alt="ic-ETITE'28" fill sizes="80px" className="object-contain" />
+                </div>
+                <span><E f="hackathon">{"Conference"}</E></span>
+              </a>
+              {settings.links.technext && (
+                <a
+                  href={settings.links.technext}
+                  className="inline-flex items-center gap-2 text-xs sm:text-sm font-bold text-white/90 hover:text-white bg-white/10 hover:bg-white/20 px-3.5 py-2 rounded-full border border-[#F37021]/60 shadow-[0_0_12px_rgba(243,112,33,0.25)] transition-all hover:scale-105"
+                >
+                  <div className="relative h-4 w-16 sm:w-22 shrink-0">
+                    <Image src="/logos/technext-logo.png" alt="TechNext '28" fill sizes="88px" className="object-contain" />
+                  </div>
+                  <span><E f="hackathon">{"Industrial Expo"}</E></span>
+                </a>
+              )}
+            </div>
           </div>
 
           <div className="text-center max-w-4xl mx-auto">
@@ -170,6 +185,39 @@ export default async function HackathonPage() {
                 </div>
               </div>
             </div>
+          </div>
+        </div>
+      </section>
+
+      {/* ── CO-LOCATED WITH TECHNEXT '28 EXPO ── */}
+      <section className="py-8 bg-gradient-to-r from-slate-900 via-brand-primary-dark to-[#0B1A30] text-white border-b border-white/10">
+        <div className="container-x">
+          <div className="flex flex-col md:flex-row items-center justify-between gap-6 p-6 sm:p-8 rounded-3xl bg-white/5 border border-white/15 backdrop-blur-sm">
+            <div className="flex flex-col sm:flex-row items-center sm:items-start gap-5 text-center sm:text-left">
+              <div className="relative h-12 sm:h-14 w-44 sm:w-52 shrink-0 bg-white/10 p-2 rounded-2xl border border-white/20">
+                <Image src="/logos/technext-logo-white.png" alt="TechNext '28 National Industrial Expo" fill sizes="208px" className="object-contain" />
+              </div>
+              <div>
+                <span className="inline-block text-[11px] font-bold uppercase tracking-wider text-[#84E320] bg-[#84E320]/15 px-2.5 py-0.5 rounded-full border border-[#84E320]/30 mb-1">
+                  <E f="hackathon">{"Co-Located National Event"}</E>
+                </span>
+                <h3 className="text-xl sm:text-2xl font-bold text-white tracking-tight">
+                  <E f="hackathon">{"TechNext '28 · National Industrial Expo & Innovation Showcase"}</E>
+                </h3>
+                <p className="mt-1 text-sm text-white/80 max-w-2xl leading-relaxed">
+                  <E f="hackathon">{"Held alongside BOLT 3.0 at VIT Vellore. Explore live hardware demos, startup stalls, investor pitches, and industrial technologies."}</E>
+                </p>
+              </div>
+            </div>
+            {settings.links.technext && (
+              <a
+                href={settings.links.technext}
+                className="shrink-0 inline-flex items-center gap-2 rounded-xl bg-gradient-to-r from-[#F37021] to-[#E05E10] px-5 py-3 text-sm font-bold text-white shadow-lg transition-all hover:scale-105 hover:brightness-110"
+              >
+                <span><E f="hackathon">{"Visit TechNext '28"}</E></span>
+                <ArrowUpRight className="h-4 w-4 text-white" />
+              </a>
+            )}
           </div>
         </div>
       </section>

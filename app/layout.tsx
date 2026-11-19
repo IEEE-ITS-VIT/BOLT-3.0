@@ -106,7 +106,7 @@ export default async function RootLayout({
       >
         <CmsProvider texts={texts} images={images}>
           <TickerBar ticker={ticker} />
-          <BoltNavbar icetiteUrl={links.icetite} />
+          <BoltNavbar icetiteUrl={links.icetite} technextUrl={links.technext} />
           <main className="flex-1">{children}</main>
           <SiteFooter links={links} />
           <BackToTop />
