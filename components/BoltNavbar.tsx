@@ -47,26 +47,6 @@ export default function BoltNavbar({ icetiteUrl, technextUrl = "" }: { icetiteUr
             {loggedIn ? <LayoutDashboard className="h-4 w-4" /> : <LogIn className="h-4 w-4" />}
             <span className="hidden sm:inline">{account.label}</span>
           </Link>
-          <a
-            href={icetiteUrl}
-            title="ic-ETITE'28 conference website"
-            className="hidden sm:inline-flex items-center justify-center h-9 px-3.5 rounded-full bg-white/10 hover:bg-white/20 border border-white/20 transition-all hover:scale-105 shrink-0"
-          >
-            <div className="relative h-4 sm:h-5 w-20 sm:w-24">
-              <Image src="/logos/ic-etite28-cropped-transparent.png" alt="ic-ETITE'28 Conference" fill sizes="96px" className="object-contain" priority />
-            </div>
-          </a>
-          {technextUrl && (
-            <a
-              href={technextUrl}
-              title="TechNext '28 National Industrial Expo"
-              className="hidden md:inline-flex items-center justify-center h-9 px-3.5 rounded-full bg-white/10 hover:bg-white/20 border border-[#F37021]/80 shadow-[0_0_12px_rgba(243,112,33,0.25)] transition-all hover:scale-105 shrink-0"
-            >
-              <div className="relative h-4 sm:h-5 w-16 sm:w-22">
-                <Image src="/logos/technext-logo.png" alt="TechNext '28 Expo" fill sizes="100px" className="object-contain" priority />
-              </div>
-            </a>
-          )}
           <button
             onClick={() => setMobileOpen(!mobileOpen)}
             className="lg:hidden p-2 rounded-xl bg-white/10 border border-white/20 text-white hover:bg-white/20"
