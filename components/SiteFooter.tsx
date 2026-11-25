@@ -63,7 +63,7 @@ export default function SiteFooter({ links }: { links: { icetite: string; bolt: 
             <li>
               <a href={links.technext} className="inline-flex items-center gap-2 hover:text-white group">
                 <div className="relative h-5 w-24 shrink-0 bg-white/10 rounded-md p-0.5 border border-white/15">
-                  <Image src="/logos/technext-logo-white.png" alt="TechNext '28" fill sizes="96px" className="object-contain" />
+                  <Image src="/logos/technext-logo.png" alt="TechNext '28" fill sizes="96px" className="object-contain" />
                 </div>
                 <span className="group-hover:underline">TechNext &apos;28 expo</span>
               </a>

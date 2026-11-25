@@ -107,7 +107,7 @@ export default function BoltNavbar({ icetiteUrl, technextUrl = "" }: { icetiteUr
             {technextUrl && (
               <a href={technextUrl} className="w-full py-2.5 px-4 rounded-xl bg-white/10 text-white font-bold text-sm flex items-center justify-center gap-2 border border-[#F37021]/50">
                 <div className="relative h-5 w-24 shrink-0">
-                  <Image src="/logos/technext-logo-white.png" alt="TechNext '28" fill sizes="96px" className="object-contain" />
+                  <Image src="/logos/technext-logo.png" alt="TechNext '28" fill sizes="96px" className="object-contain" />
                 </div>
                 <span>
                   <E f="c.BoltNavbar">{"TechNext '28 expo"}</E>

@@ -195,7 +195,7 @@ export default async function HackathonPage() {
           <div className="flex flex-col md:flex-row items-center justify-between gap-6 p-6 sm:p-8 rounded-3xl bg-white/5 border border-white/15 backdrop-blur-sm">
             <div className="flex flex-col sm:flex-row items-center sm:items-start gap-5 text-center sm:text-left">
               <div className="relative h-12 sm:h-14 w-44 sm:w-52 shrink-0 bg-white/10 p-2 rounded-2xl border border-white/20">
-                <Image src="/logos/technext-logo-white.png" alt="TechNext '28 National Industrial Expo" fill sizes="208px" className="object-contain" />
+                <Image src="/logos/technext-logo.png" alt="TechNext '28 National Industrial Expo" fill sizes="208px" className="object-contain" />
               </div>
               <div>
                 <span className="inline-block text-[11px] font-bold uppercase tracking-wider text-[#84E320] bg-[#84E320]/15 px-2.5 py-0.5 rounded-full border border-[#84E320]/30 mb-1">
