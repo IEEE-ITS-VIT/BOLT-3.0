@@ -54,7 +54,13 @@ export const metadata: Metadata = {
   description:
     "BOLT 3.0 (Breakthrough On Locked Technology) is the national flagship 24-hour hackathon by the IEEE ITS Student Chapter and SCORE at VIT Vellore, held alongside ic-ETITE'28.",
   keywords: ["BOLT 3.0", "BOLT hackathon", "hackathon VIT", "national hackathon India", "IEEE ITS VIT", "SCORE VIT", "ic-ETITE'28"],
-  icons: { icon: "/logos/bolt-logo-white.png" },
+  icons: {
+    icon: [
+      { url: "/favicon.ico", sizes: "any" },
+      { url: "/icon.png", type: "image/png", sizes: "32x32" },
+    ],
+    apple: [{ url: "/apple-icon.png", sizes: "180x180" }],
+  },
   category: "technology",
   openGraph: {
     title: "BOLT 3.0 — National 24-hour Hackathon",
