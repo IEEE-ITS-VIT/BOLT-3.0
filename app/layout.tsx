@@ -56,10 +56,10 @@ export const metadata: Metadata = {
   keywords: ["BOLT 3.0", "BOLT hackathon", "hackathon VIT", "national hackathon India", "IEEE ITS VIT", "SCORE VIT", "ic-ETITE'28"],
   icons: {
     icon: [
-      { url: "/favicon.ico", sizes: "any" },
-      { url: "/icon.png", type: "image/png", sizes: "32x32" },
+      { url: "/favicon.ico?v=3", sizes: "any" },
+      { url: "/icon.png?v=3", type: "image/png", sizes: "512x512" },
     ],
-    apple: [{ url: "/apple-icon.png", sizes: "180x180" }],
+    apple: [{ url: "/apple-icon.png?v=3", sizes: "180x180" }],
   },
   category: "technology",
   openGraph: {

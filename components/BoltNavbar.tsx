@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import Image from "@/components/cms/EImage";
-import { ArrowUpRight, LayoutDashboard, LogIn, Menu, X } from "lucide-react";
+import { LayoutDashboard, LogIn, Menu, X } from "lucide-react";
 import E from "@/components/cms/E";
 
 // Top navigation of the BOLT 3.0 website.
@@ -73,28 +73,6 @@ export default function BoltNavbar({ icetiteUrl, technextUrl = "" }: { icetiteUr
                 <E f="c.BoltNavbar">{link.label}</E>
               </Link>
             ))}
-          </div>
-          <div className="pt-3 border-t border-white/10 space-y-2">
-            <a href={icetiteUrl} className="w-full py-2.5 px-4 rounded-xl bg-brand-secondary text-white font-bold text-sm flex items-center justify-center gap-2">
-              <div className="relative h-5 w-20 shrink-0">
-                <Image src="/logos/ic-etite28-cropped-transparent.png" alt="ic-ETITE'28" fill sizes="80px" className="object-contain" />
-              </div>
-              <span>
-                <E f="c.BoltNavbar">{"ic-ETITE'28 conference"}</E>
-              </span>
-              <ArrowUpRight className="w-4 h-4 text-[#CCFF00]" />
-            </a>
-            {technextUrl && (
-              <a href={technextUrl} className="w-full py-2.5 px-4 rounded-xl bg-white/10 text-white font-bold text-sm flex items-center justify-center gap-2 border border-[#F37021]/50">
-                <div className="relative h-5 w-24 shrink-0">
-                  <Image src="/logos/technext-logo.png" alt="TechNext '28" fill sizes="96px" className="object-contain" />
-                </div>
-                <span>
-                  <E f="c.BoltNavbar">{"TechNext '28 expo"}</E>
-                </span>
-                <ArrowUpRight className="w-4 h-4 text-[#84E320]" />
-              </a>
-            )}
           </div>
         </div>
       )}
