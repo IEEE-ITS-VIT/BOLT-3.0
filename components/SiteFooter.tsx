@@ -54,16 +54,20 @@ export default function SiteFooter({ links }: { links: { icetite: string; bolt: 
           <ul className="mt-3 space-y-3 text-sm">
             <li>
               <a href={links.icetite} className="inline-flex items-center gap-2.5 text-white hover:text-white group">
-                <div className="relative h-7 w-24 shrink-0 bg-white/10 rounded-xl px-2.5 py-1 border border-white/25 flex items-center justify-center">
-                  <Image src="/logos/ic-etite28-cropped-transparent.png" alt="ic-ETITE'28" fill sizes="96px" className="object-contain" />
+                <div className="h-8 w-28 shrink-0 bg-white/10 rounded-xl px-3 py-1.5 border border-white/25 flex items-center justify-center">
+                  <div className="relative h-4 w-full">
+                    <Image src="/logos/ic-etite28-cropped-transparent.png" alt="ic-ETITE'28" fill sizes="90px" className="object-contain object-center" />
+                  </div>
                 </div>
                 <span className="font-medium group-hover:underline">ic-ETITE&apos;28 conference</span>
               </a>
             </li>
             <li>
               <a href={links.technext} className="inline-flex items-center gap-2.5 text-white hover:text-white group">
-                <div className="relative h-7 w-24 shrink-0 bg-white/10 rounded-xl px-2.5 py-1 border border-[#F37021]/50 flex items-center justify-center">
-                  <Image src="/logos/technext-logo.png" alt="TechNext '28" fill sizes="96px" className="object-contain" />
+                <div className="h-8 w-28 shrink-0 bg-white/10 rounded-xl px-3 py-1.5 border border-[#F37021]/50 flex items-center justify-center">
+                  <div className="relative h-4 w-full">
+                    <Image src="/logos/technext-logo.png" alt="TechNext '28" fill sizes="90px" className="object-contain object-center" />
+                  </div>
                 </div>
                 <span className="font-medium group-hover:underline">TechNext &apos;28 expo</span>
               </a>
