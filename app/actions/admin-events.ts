@@ -9,6 +9,7 @@ import { newId, slugify } from "@/lib/portal/ids";
 import { PAYMENT_STATUSES, applyPaymentStatus, type PaymentStatus } from "@/lib/payments";
 import { emailLayout, fillTemplate, outboxInsert, textToHtml } from "@/lib/email/mailer";
 import { resolveAudience } from "@/lib/portal/audience";
+import { getSettings } from "@/lib/settings";
 
 const base = (id: string) => `/admin/events/${id}`;
 
@@ -357,11 +358,91 @@ export async function publishWinnersAction(fd: FormData) {
 export async function adminSetEventPaymentAction(fd: FormData) {
   await requireAdmin();
   const eventId = str(fd, "event_id", 40);
+  const userId = str(fd, "user_id", 40);
   await guarded(`${base(eventId)}?tab=participants`, async () => {
     const status = str(fd, "status", 20) as PaymentStatus;
     if (!PAYMENT_STATUSES.includes(status)) throw new PortalError("Invalid payment status.");
-    await applyPaymentStatus("event", `${eventId}:${str(fd, "user_id", 40)}`, status, str(fd, "payment_ref", 120) || null);
+
+    const before = await first<{ payment_status: string }>(
+      "SELECT payment_status FROM registrations WHERE event_id = ? AND user_id = ?",
+      [eventId, userId]
+    );
+    if (!before) throw new PortalError("Registration not found.");
+
+    // Rule 1: If once payment is paid and confirmed through API no one can edit
+    if (before.payment_status === "paid" && status !== "paid") {
+      throw new PortalError("This event registration is paid and confirmed. Payment status is locked and cannot be changed manually (use the Refund action if authorized).");
+    }
+    if (before.payment_status === "refunded" && status !== "refunded") {
+      throw new PortalError("This event registration has been refunded and its status cannot be altered.");
+    }
+
+    // Rule 2: If API is configured the payment status cannot be changed manually
+    const settings = await getSettings();
+    if (settings.payments.provider === "vit" && before.payment_status !== "paid" && status === "paid") {
+      throw new PortalError("Payment API is configured. Payment status is updated automatically through the gateway callback and cannot be manually marked as paid.");
+    }
+
+    await applyPaymentStatus("event", `${eventId}:${userId}`, status, str(fd, "payment_ref", 120) || null);
     return status === "paid" ? "Marked paid — invoice issued and emailed." : "Payment status updated.";
+  });
+}
+
+export async function processRefundAction(fd: FormData) {
+  const admin = await requireAdmin();
+  const purpose = str(fd, "purpose", 20) as "technext" | "conference" | "event";
+  const id = str(fd, "id", 60);
+  const password = str(fd, "refund_password", 100);
+  const reason = str(fd, "refund_reason", 300) || "Authorized refund";
+  const back = str(fd, "back", 200) || "/admin/events";
+
+  await guarded(back, async () => {
+    if (!password) {
+      throw new PortalError("Refund authorization password is required.");
+    }
+    const { hasRefundPassword, verifyRefundPassword } = await import("@/lib/refund");
+    const configured = await hasRefundPassword();
+    if (!configured) {
+      throw new PortalError("Refund security password has not been configured yet. Please configure it in the ieeeitsvitscore@gmail.com profile first.");
+    }
+    const valid = await verifyRefundPassword(password);
+    if (!valid) {
+      throw new PortalError("Incorrect refund authorization password. Refund rejected.");
+    }
+
+    if (purpose === "event") {
+      const [eventId, userId] = id.split(":");
+      const reg = await first<{ event_id: string; user_id: string; payment_status: string; payment_amount: number; payment_currency: string }>(
+        "SELECT event_id, user_id, payment_status, payment_amount, payment_currency FROM registrations WHERE event_id = ? AND user_id = ?",
+        [eventId, userId]
+      );
+      if (!reg) throw new PortalError("Event registration not found.");
+      if (reg.payment_status !== "paid") {
+        throw new PortalError("Only successfully paid registrations can be refunded.");
+      }
+
+      await run(
+        "UPDATE registrations SET payment_status = 'refunded' WHERE event_id = ? AND user_id = ?",
+        [eventId, userId]
+      );
+
+      await run("UPDATE payments SET status = 'refunded', updated_at = ? WHERE purpose = 'event' AND ref_id = ?", [now(), id]).catch(() => {});
+
+      try {
+        const { logAudit } = await import("@/lib/audit");
+        await logAudit({
+          userId: admin.id,
+          userEmail: admin.email,
+          userName: admin.name,
+          action: "records.refund_processed",
+          category: "records",
+          path: `/admin/events/${eventId}`,
+          details: { purpose: "event", ref: id, amount: reg.payment_amount, currency: reg.payment_currency, reason },
+        });
+      } catch {}
+    }
+
+    return "Refund processed successfully. Record marked as refunded and status updated.";
   });
 }
 

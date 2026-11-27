@@ -4,6 +4,7 @@ import { notFound } from "next/navigation";
 import { ExternalLink } from "lucide-react";
 import { all, first, parseJson } from "@/lib/db";
 import { fmtIst, isoToIstInput } from "@/lib/portal/actions";
+import { getSettings } from "@/lib/settings";
 import { getEventById, getRounds, registrationWindow, roundCriteria, roundFields, roundLeaderboard, submissionFields } from "@/lib/portal/events";
 import { PAYMENT_STATUSES } from "@/lib/payments";
 import { audienceOptions, PLACEHOLDERS } from "@/lib/portal/audience";
@@ -13,6 +14,7 @@ import {
   adminDeleteTeamAction,
   adminRemoveRegistrationAction,
   adminSetEventPaymentAction,
+  processRefundAction,
   assignEvaluatorsAction,
   autoRankAction,
   deleteEvaluationAction,
@@ -56,6 +58,7 @@ export default async function AdminEventPage({ params, searchParams }: { params:
   if (!event) notFound();
   const base = `/admin/events/${id}`;
   const here = `${base}?tab=${tab}`;
+  const settings = await getSettings();
 
   const [counts, rounds] = await Promise.all([
     first<{ regs: number; teams: number; unpaid: number; subs: number }>(
@@ -207,18 +210,47 @@ export default async function AdminEventPage({ params, searchParams }: { params:
                     <form action={adminSetEventPaymentAction} className="flex flex-wrap items-center gap-1.5">
                       <input type="hidden" name="event_id" value={eventId} />
                       <input type="hidden" name="user_id" value={r.user_id} />
-                      <select name="status" defaultValue={r.payment_status} className={`${small} !w-32`}>
-                        {PAYMENT_STATUSES.map((s) => (
-                          <option key={s} value={s}>
-                            {s.replace("_", " ")}
-                          </option>
-                        ))}
-                      </select>
-                      <input name="payment_ref" defaultValue={r.payment_ref ?? ""} placeholder="Ref / UTR" className={`${small} !w-28`} />
-                      <SubmitButton className={btnSecondary} pendingText="…">
-                        Save
-                      </SubmitButton>
+                      {r.payment_status === "paid" ? (
+                        <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded text-xs font-bold bg-green-100 text-green-800 border border-green-200">
+                          ✓ Paid (Locked)
+                        </span>
+                      ) : r.payment_status === "refunded" ? (
+                        <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded text-xs font-bold bg-purple-100 text-purple-800 border border-purple-200">
+                          Refunded
+                        </span>
+                      ) : (
+                        <>
+                          <select name="status" defaultValue={r.payment_status} className={`${small} !w-32`}>
+                            {PAYMENT_STATUSES.filter((s) => s !== "paid" || settings.payments.provider !== "vit").map((s) => (
+                              <option key={s} value={s}>
+                                {s.replace("_", " ")}
+                              </option>
+                            ))}
+                          </select>
+                          <input name="payment_ref" defaultValue={r.payment_ref ?? ""} placeholder="Ref / UTR" className={`${small} !w-28`} />
+                          <SubmitButton className={btnSecondary} pendingText="…">
+                            Save
+                          </SubmitButton>
+                        </>
+                      )}
                     </form>
+                    {r.payment_status === "paid" && (
+                      <details className="mt-1 rounded border border-rose-200 bg-rose-50/50 p-2">
+                        <summary className="cursor-pointer text-[11px] font-bold text-rose-700 hover:underline">
+                          Refund Registration
+                        </summary>
+                        <form action={processRefundAction} className="mt-1.5 space-y-1.5 pt-1.5 border-t border-rose-200">
+                          <input type="hidden" name="purpose" value="event" />
+                          <input type="hidden" name="id" value={`${eventId}:${r.user_id}`} />
+                          <input type="hidden" name="back" value={`/admin/events/${eventId}?tab=participants`} />
+                          <input name="refund_password" type="password" required className={`${small} !bg-white !text-xs !py-1`} placeholder="Refund auth password" />
+                          <input name="refund_reason" type="text" className={`${small} !bg-white !text-xs !py-1`} placeholder="Reason (optional)" />
+                          <SubmitButton className="!bg-rose-600 text-white !py-1 !px-2.5 !text-[11px] font-bold rounded" pendingText="Refunding…">
+                            Confirm Refund
+                          </SubmitButton>
+                        </form>
+                      </details>
+                    )}
                   </Td>
                   <Td className="text-right">
                     <div className="flex justify-end gap-1.5">
