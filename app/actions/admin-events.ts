@@ -214,7 +214,11 @@ export async function setRoundFlagAction(fd: FormData) {
     const flag = str(fd, "flag", 30);
     if (flag !== "submissions_open" && flag !== "scores_published") throw new PortalError("Invalid setting.");
     const value = str(fd, "value", 2) === "1" ? 1 : 0;
-    await run(`UPDATE event_rounds SET ${flag} = ? WHERE id = ? AND event_id = ?`, [value, str(fd, "round_id", 40), eventId]);
+    const query =
+      flag === "submissions_open"
+        ? "UPDATE event_rounds SET submissions_open = ? WHERE id = ? AND event_id = ?"
+        : "UPDATE event_rounds SET scores_published = ? WHERE id = ? AND event_id = ?";
+    await run(query, [value, str(fd, "round_id", 40), eventId]);
     if (flag === "submissions_open") return value ? "Submissions opened." : "Submissions closed.";
     return value ? "Scores published — teams can now see their scores and qualification." : "Scores hidden from teams.";
   });
