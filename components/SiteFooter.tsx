@@ -9,15 +9,15 @@ export default function SiteFooter({ links }: { links: { icetite: string; bolt: 
   const own =
     SITE === "bolt"
       ? [
-          { label: "Home", href: "/" },
-          { label: "Events", href: "/events" },
-          { label: "Register", href: "/#register" },
-        ]
+        { label: "Home", href: "/" },
+        { label: "Events", href: "/events" },
+        { label: "Register", href: "/#register" },
+      ]
       : [
-          { label: "Home", href: "/" },
-          { label: "Book a stall", href: "/register" },
-          { label: "Expo categories", href: "/#categories" },
-        ];
+        { label: "Home", href: "/" },
+        { label: "Book a stall", href: "/register" },
+        { label: "Expo categories", href: "/#categories" },
+      ];
 
   return (
     <footer className="bg-brand-primary-dark text-white">
